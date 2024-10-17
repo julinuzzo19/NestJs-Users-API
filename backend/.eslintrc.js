@@ -1,5 +1,3 @@
-const eslintPluginPrettierRecommended = require('eslint-plugin-prettier/recommended');
-
 module.exports = {
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -22,5 +20,4 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
   },
-  eslintPluginPrettierRecommended,
 };
