@@ -1,0 +1,18 @@
+{
+  "name": "nest---next-example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "cd ./backend && npm run test",
+    "format": "cd ./backend && npm run format",
+    "lint": "cd ./backend && npm run lint",
+    "build": "cd ./backend && npm run build",
+    "prepare": "husky"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "husky": "^9.1.6"
+  }
+}
