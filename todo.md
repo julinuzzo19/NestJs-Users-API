@@ -7,6 +7,7 @@
 - Error handling
 - Logging
 - Autentication / Authorization / Security API
+- Hash password
 - Tests
 - CI/CD
 - Dockerization
