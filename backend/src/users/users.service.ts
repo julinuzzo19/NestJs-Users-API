@@ -1,14 +1,24 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { DatabaseService } from 'src/database/database.service';
 import { User } from './entities/user.entity';
+import { UserUpdateDto } from './dto/user-update.dto';
 
 @Injectable()
 export class UsersService {
   constructor(private databaseService: DatabaseService) {}
 
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserBody: User) {
+    await this.databaseService.query(
+      'INSERT INTO users (id, email, password, name, role) VALUES (?, ?, ?, ?, ?)',
+      [
+        createUserBody.id,
+        createUserBody.email,
+        createUserBody.password,
+        createUserBody.name,
+        createUserBody.role,
+      ],
+    );
+
     return 'This action adds a new user';
   }
 
@@ -38,16 +48,10 @@ export class UsersService {
 
     const userFound: User = rows[0];
 
-    console.log({ userFound });
-
-    if (!userFound) {
-      throw new NotFoundException();
-    }
-
     return userFound;
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
+  async update(id: number, updateUserDto: UserUpdateDto) {
     return `This action updates a #${id} user`;
   }
 

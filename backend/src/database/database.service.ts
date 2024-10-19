@@ -20,6 +20,7 @@ export class DatabaseService {
   }
 
   public async query(sql: string, values?: any[]) {
+    // console.log({ sql, values });
     const [results] = await this.connection.execute(sql, values || []);
     return results;
   }

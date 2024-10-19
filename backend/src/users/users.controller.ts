@@ -1,19 +1,16 @@
 import {
   Controller,
   Get,
-  Post,
   Body,
   Patch,
   Param,
   Delete,
   UseGuards,
-  Req,
+  NotFoundException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UserUpdateDto } from './dto/user-update.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { Request } from 'express';
 import { Role } from 'src/roles/role';
 import { Roles } from 'src/roles/role.decorator';
 import { RolesGuard } from 'src/roles/roles.guard';
@@ -21,11 +18,6 @@ import { RolesGuard } from 'src/roles/roles.guard';
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
-  }
 
   @UseGuards(AuthGuard, RolesGuard)
   @Get()
@@ -36,11 +28,17 @@ export class UsersController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.usersService.findOne({ id });
+    const userFound = this.usersService.findOne({ id });
+
+    if (!userFound) {
+      throw new NotFoundException();
+    }
+
+    return userFound;
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  update(@Param('id') id: string, @Body() updateUserDto: UserUpdateDto) {
     return this.usersService.update(+id, updateUserDto);
   }
 
