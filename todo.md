@@ -6,8 +6,8 @@
 
 - Error handling
 - Logging
-x Autentication / Authorization / Security API
-x Hash password
+  x Autentication / Authorization / Security API
+  x Hash password
 - Tests
 - CI/CD
 - Dockerization
@@ -26,3 +26,4 @@ x Hash password
 authentication
 authorizations (roles)
 encrypt password
+Husky + Lint-staged -> precommit
