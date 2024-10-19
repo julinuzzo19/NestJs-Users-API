@@ -15,7 +15,6 @@ export class UsersService {
   }
 
   async findAll() {
-    this.logger.error('hola');
     return await this.databaseService.query('SELECT * FROM usuarios;');
   }
 

@@ -6,7 +6,7 @@ import {
 
 // custom log display format
 const customFormat = format.printf(({ timestamp, level, stack, message }) => {
-  return `${timestamp} - [${level.toUpperCase().padEnd(7)}] - ${stack || message}`;
+  return `${timestamp} - [${level.toUpperCase()}] - ${message}`;
 });
 
 const options: {
