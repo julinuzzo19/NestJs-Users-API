@@ -8,6 +8,7 @@
     "format": "cd ./backend && npm run format",
     "lint": "cd ./backend && npm run lint",
     "build": "cd ./backend && npm run build",
+    "lint-staged": "cd ./backend && npm run lint-staged",
     "prepare": "husky"
   },
   "author": "",

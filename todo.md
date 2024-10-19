@@ -6,8 +6,8 @@
 
 - Error handling
 - Logging
-- Autentication / Authorization / Security API
-- Hash password
+x Autentication / Authorization / Security API
+x Hash password
 - Tests
 - CI/CD
 - Dockerization
@@ -18,3 +18,11 @@
 <!-- Frontend -->
 
 ...
+
+<!-- DONE -->
+
+<!-- Backend -->
+
+authentication
+authorizations (roles)
+encrypt password
