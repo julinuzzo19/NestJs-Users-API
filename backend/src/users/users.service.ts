@@ -3,26 +3,23 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { DatabaseService } from 'src/database/database.service';
 import { User } from './entities/user.entity';
-import { Config } from 'winston/lib/winston/config';
-import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UsersService {
-  constructor(
-    private databaseService: DatabaseService,
-    private configService: ConfigService,
-  ) {}
+  constructor(private databaseService: DatabaseService) {}
 
   async create(createUserDto: CreateUserDto) {
     return 'This action adds a new user';
   }
 
   async findAll() {
-    return await this.databaseService.query('SELECT id, email, password, nombre FROM usuarios;');
+    return await this.databaseService.query(
+      'SELECT id, email, password, name, role FROM users;',
+    );
   }
 
   async findOne({ id, email }: { id?: string; email?: string }) {
-    const QUERY = `SELECT id, email, password, nombre FROM usuarios 
+    const QUERY = `SELECT id, email, password, name, role FROM users 
     WHERE true 
     ${id ? ' AND id = ?' : ''}
     ${email ? ' AND email = ?' : ''}

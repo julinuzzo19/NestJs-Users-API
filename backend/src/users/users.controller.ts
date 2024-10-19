@@ -14,6 +14,9 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { Request } from 'express';
+import { Role } from 'src/roles/role';
+import { Roles } from 'src/roles/role.decorator';
+import { RolesGuard } from 'src/roles/roles.guard';
 
 @Controller('users')
 export class UsersController {
@@ -24,11 +27,10 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   @Get()
-  findAll(@Req() request: Request) {
-    const user = request.user;
-
+  @Roles(Role.USER)
+  findAll() {
     return this.usersService.findAll();
   }
 
