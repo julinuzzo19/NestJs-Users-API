@@ -2,12 +2,13 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
 import { User } from './entities/user.entity';
 import { UserUpdateDto } from './dto/user-update.dto';
+import { UserCreateDto } from './dto/user-create.dto';
 
 @Injectable()
 export class UsersService {
   constructor(private databaseService: DatabaseService) {}
 
-  async create(createUserBody: User) {
+  async create(createUserBody: UserCreateDto) {
     await this.databaseService.query(
       'INSERT INTO users (id, email, password, name, role) VALUES (?, ?, ?, ?, ?)',
       [

@@ -1,8 +1,14 @@
-import { User } from "../entities/user.entity";
+import { IsEmail, IsNotEmpty, IsUUID, IsIn } from 'class-validator';
 
 export class UserCreateDto {
-  name:  User["role"];;
-  email:  User["role"];;
-  password:  User["role"];;
-  role: User["role"];
+  @IsUUID()
+  id: string;
+  @IsNotEmpty()
+  name: string;
+  @IsEmail()
+  email: string;
+  @IsNotEmpty()
+  password: string;
+  @IsIn(['ADMIN', 'USER'])
+  role: string;
 }

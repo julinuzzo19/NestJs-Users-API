@@ -3,6 +3,7 @@ import {
   ConsoleTransportOptions,
   FileTransportOptions,
 } from 'winston/lib/winston/transports';
+import { NODE_ENV } from './envs';
 
 // custom log display format
 const customFormat = format.printf(({ timestamp, level, stack, message }) => {
@@ -49,7 +50,6 @@ const prodLogger = {
 };
 
 // export log instance based on the current environment
-const instanceLogger =
-  process.env.NODE_ENV === 'production' ? prodLogger : devLogger;
+const instanceLogger = NODE_ENV === 'production' ? prodLogger : devLogger;
 
 export const logger = createLogger(instanceLogger);

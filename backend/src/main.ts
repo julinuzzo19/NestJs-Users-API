@@ -4,6 +4,7 @@ import { WinstonModule } from 'nest-winston';
 import { logger } from './config/logger';
 import helmet from 'helmet';
 import * as morgan from 'morgan';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -11,6 +12,7 @@ async function bootstrap() {
   app.enableCors({ methods: ['POST', 'GET', 'PUT', 'PATCH', 'DELETE'] });
   app.useLogger(WinstonModule.createLogger({ instance: logger }));
   app.use(morgan('dev'));
+  app.useGlobalPipes(new ValidationPipe());
   await app.listen(process.env.PORT);
 }
 bootstrap();
