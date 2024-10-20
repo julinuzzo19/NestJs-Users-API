@@ -1,23 +1,18 @@
 import { createLogger, format, transports } from 'winston';
-import {
-  ConsoleTransportOptions,
-  FileTransportOptions,
-} from 'winston/lib/winston/transports';
-import { NODE_ENV } from './envs';
+import { ConsoleTransportOptions } from 'winston/lib/winston/transports';
+import * as dotenv from 'dotenv';
+dotenv.config();
+
+const { combine, timestamp, label, printf } = format;
 
 // custom log display format
 const customFormat = format.printf(({ timestamp, level, stack, message }) => {
-  return `${timestamp} - [${level.toUpperCase()}] - ${message}`;
+  return `${timestamp} - [${level.toUpperCase()}] - ${message} - ${stack}`;
 });
 
 const options: {
   console: ConsoleTransportOptions;
-  file: FileTransportOptions;
 } = {
-  file: {
-    filename: 'error.log',
-    level: 'error',
-  },
   console: {
     level: 'silly',
   },
@@ -26,7 +21,7 @@ const options: {
 // for development environment
 const devLogger = {
   format: format.combine(
-    format.timestamp(),
+    timestamp(),
     format.errors({ stack: true }),
     customFormat,
   ),
@@ -34,22 +29,23 @@ const devLogger = {
 };
 
 // for production environment
+const formatProd = printf(({ level, message, timestamp }) => {
+  return `${timestamp} [${level}]: ${message}`;
+});
+
 const prodLogger = {
-  format: format.combine(
-    format.timestamp(),
-    format.errors({ stack: true }),
-    format.json(),
-  ),
+  level: 'warn',
+  format: combine(timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }), formatProd),
   transports: [
-    new transports.File(options.file),
+    new transports.File({ filename: 'logs/error.log', level: 'error' }),
     new transports.File({
-      filename: 'combine.log',
+      filename: 'logs/info.log',
       level: 'info',
     }),
   ],
 };
 
-// export log instance based on the current environment
-const instanceLogger = NODE_ENV === 'production' ? prodLogger : devLogger;
+const instanceLogger =
+  process.env.NODE_ENV === 'production' ? prodLogger : devLogger;
 
 export const logger = createLogger(instanceLogger);
