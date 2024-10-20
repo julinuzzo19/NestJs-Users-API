@@ -9,7 +9,6 @@ import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 import { SignUpDto } from './dto/login.dto';
 import { generateUUID } from 'src/utils/generateUUID';
-import { User } from 'src/users/entities/user.entity';
 import { UserCreateDto } from 'src/users/dto/user-create.dto';
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
@@ -54,8 +53,7 @@ export class AuthService {
       ...signUpDto,
       id: generateUUID(),
       role: 'USER',
-      // password: await bcrypt.hash(signUpDto.password, this.saltOrRounds),
-      password: '',
+      password: await bcrypt.hash(signUpDto.password, this.saltOrRounds),
     };
 
     const dtoUser = plainToInstance(UserCreateDto, bodyUserCreate);
@@ -64,13 +62,13 @@ export class AuthService {
     console.log({ errors });
 
     if (errors.length > 0) {
-      console.log({
-        err: errors
-          .map((item) => {
-            return Object.values(item.constraints)?.join(', ');
-          })
-          .join(', '),
-      });
+      // console.log({
+      //   err: errors
+      //     .map((item) => {
+      //       return Object.values(item.constraints)?.join(', ');
+      //     })
+      //     .join(', '),
+      // });
       throw new BadRequestException(errors);
     } else {
       await this.userService.create(bodyUserCreate);
