@@ -5,6 +5,7 @@ import { logger } from './config/logger';
 import helmet from 'helmet';
 import * as morgan from 'morgan';
 import { ValidationPipe } from '@nestjs/common';
+import { GlobalExceptionFilter } from './config/exceptions.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -13,6 +14,8 @@ async function bootstrap() {
   app.useLogger(WinstonModule.createLogger({ instance: logger }));
   app.use(morgan('dev'));
   app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalFilters(new GlobalExceptionFilter());
+
   await app.listen(process.env.PORT);
 }
 bootstrap();
