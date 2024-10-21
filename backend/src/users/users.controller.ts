@@ -14,14 +14,16 @@ import { AuthGuard } from 'src/auth/auth.guard';
 import { Role } from 'src/roles/role';
 import { Roles } from 'src/roles/role.decorator';
 import { RolesGuard } from 'src/roles/roles.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@UseGuards(AuthGuard, RolesGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @UseGuards(AuthGuard, RolesGuard)
-  @Get()
   @Roles(Role.USER)
+  @Get()
   findAll() {
     return this.usersService.findAll();
   }
