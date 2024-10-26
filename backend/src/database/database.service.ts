@@ -1,22 +1,28 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { Connection, createConnection } from 'mysql2/promise';
+import {
+  DB_HOST,
+  DB_NAME,
+  DB_PASSWORD,
+  DB_PORT,
+  DB_USER,
+} from 'src/config/configs';
 
 @Injectable()
 export class DatabaseService {
   private connection: Connection;
 
-  constructor(private configService: ConfigService) {
+  constructor() {
     this.getConnection();
   }
 
   private async getConnection() {
     this.connection = await createConnection({
-      host: this.configService.get<string>('DB_HOST'),
-      user: this.configService.get<string>('DB_USER'),
-      password: this.configService.get<string>('DB_PASSWORD'),
-      database: this.configService.get<string>('DB_NAME'),
-      port: Number(this.configService.get<string>('DB_PORT')),
+      host: DB_HOST,
+      user: DB_USER,
+      password: DB_PASSWORD,
+      database: DB_NAME,
+      port: DB_PORT as any,
     });
   }
 

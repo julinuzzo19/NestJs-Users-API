@@ -1,7 +1,6 @@
 import { createLogger, format, transports } from 'winston';
 import { ConsoleTransportOptions } from 'winston/lib/winston/transports';
-import * as dotenv from 'dotenv';
-dotenv.config();
+import { NODE_ENV } from './configs';
 
 const { combine, timestamp, label, printf } = format;
 
@@ -45,7 +44,6 @@ const prodLogger = {
   ],
 };
 
-const instanceLogger =
-  process.env.NODE_ENV === 'production' ? prodLogger : devLogger;
+const instanceLogger = NODE_ENV === 'production' ? prodLogger : devLogger;
 
 export const logger = createLogger(instanceLogger);
