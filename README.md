@@ -4,17 +4,15 @@
 ## Working in progress 
 
 ### Todo list
-- [X] Error handling
-- [X] Logging
 - [X] Autentication / Authorization / Security API
-- [X] Hash password
-- [X] Documentation
+- [X] Logging
+- [X] Error handling
 - [X] Data validation
-- [ ] Upload files
+- [X] Documentation
+- [X] Upload files
 - [ ] OWASP recommendations
 - [ ] Cache functionality
 - [ ] Tests
 - [ ] CI/CD
 - [ ] Dockerization
-- [ ] Deploy to Ubuntu Server
-- [ ] SSL Certificate
+- [ ] Deploy + SSL
