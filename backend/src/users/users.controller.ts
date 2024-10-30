@@ -11,6 +11,7 @@ import {
   UseInterceptors,
   UploadedFile,
   Req,
+  BadRequestException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UserUpdateDto } from './dto/user-update.dto';
@@ -58,6 +59,7 @@ export class UsersController {
   @Post('profile/avatar')
   @UseInterceptors(
     FileInterceptor('file', {
+      limits: { fileSize: 1024 * 1024 * 5 }, // 5MB
       storage: diskStorage({
         destination: 'public/avatars',
         filename: (req, file, cb) => {
@@ -66,6 +68,19 @@ export class UsersController {
           cb(null, `${userId}.${file.originalname.split('.')[1]}`);
         },
       }),
+      fileFilter(req, file, callback) {
+        console.log({ file });
+        if (!file.mimetype.match(/\/(jpg|jpeg|png)$/)) {
+          return callback(
+            new BadRequestException(
+              'Only JPG, PNG, and JPEG files are allowed!',
+            ),
+            false,
+          );
+        } else {
+          return callback(null, true);
+        }
+      },
     }),
   )
   uploadAvatar(@UploadedFile() file: Express.Multer.File, @Req() req: Request) {
