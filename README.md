@@ -10,7 +10,7 @@
 - [X] Hash password
 - [X] Documentation
 - [X] Data validation
-- [ ] Upload files
+- [X] Upload files
 - [ ] OWASP recommendations
 - [ ] Cache functionality
 - [ ] Tests
