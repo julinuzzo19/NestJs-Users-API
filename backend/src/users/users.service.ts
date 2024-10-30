@@ -1,8 +1,13 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
 import { User } from './entities/user.entity';
 import { UserUpdateDto } from './dto/user-update.dto';
 import { UserCreateDto } from './dto/user-create.dto';
+import { logger } from 'src/config/logger';
 
 @Injectable()
 export class UsersService {
@@ -58,5 +63,16 @@ export class UsersService {
 
   async remove(id: number) {
     return `This action removes a #${id} user`;
+  }
+
+  async uploadAvatar(id: string, file: Express.Multer.File) {
+    const filePath = `avatars/${id}.${file.originalname.split('.')[1]}`;
+
+    this.databaseService.query('UPDATE users SET avatar = ? WHERE id = ?', [
+      filePath,
+      id,
+    ]);
+
+    return { message: 'Avatar cargado correctamente', statusCode: 200 };
   }
 }

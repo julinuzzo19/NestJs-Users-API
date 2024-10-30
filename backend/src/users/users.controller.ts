@@ -7,6 +7,10 @@ import {
   Delete,
   UseGuards,
   NotFoundException,
+  Post,
+  UseInterceptors,
+  UploadedFile,
+  Req,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UserUpdateDto } from './dto/user-update.dto';
@@ -15,6 +19,8 @@ import { Role } from 'src/roles/role';
 import { Roles } from 'src/roles/role.decorator';
 import { RolesGuard } from 'src/roles/roles.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
 
 @ApiBearerAuth()
 @UseGuards(AuthGuard, RolesGuard)
@@ -47,5 +53,25 @@ export class UsersController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);
+  }
+
+  @Post('profile/avatar')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: 'public/avatars',
+        filename: (req, file, cb) => {
+          // @ts-ignore
+          const userId = req.user.sub;
+          cb(null, `${userId}.${file.originalname.split('.')[1]}`);
+        },
+      }),
+    }),
+  )
+  uploadAvatar(@UploadedFile() file: Express.Multer.File, @Req() req: Request) {
+    // @ts-ignore
+    const userId = req.user.sub;
+
+    return this.usersService.uploadAvatar(userId, file);
   }
 }
