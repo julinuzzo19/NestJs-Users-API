@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import * as express from 'express';
 import { WinstonModule } from 'nest-winston';
 import { logger } from './config/logger';
 import helmet from 'helmet';
@@ -9,6 +10,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { GlobalExceptionFilter } from './config/exceptions.filter';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { CLIENT_URL, NODE_ENV } from './config/configs';
+import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -30,6 +32,9 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   // exceptions handler
   app.useGlobalFilters(new GlobalExceptionFilter());
+  // serve avatar users
+  app.use('/avatars', express.static(join(process.cwd(), 'public', 'avatars')));
+
   // documentation configuration
   if (NODE_ENV === 'production') {
     const config = new DocumentBuilder()
