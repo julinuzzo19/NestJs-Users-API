@@ -22,6 +22,7 @@ import { RolesGuard } from 'src/roles/roles.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { Request } from 'express';
 
 @ApiBearerAuth()
 @UseGuards(AuthGuard, RolesGuard)
@@ -63,13 +64,13 @@ export class UsersController {
       storage: diskStorage({
         destination: 'public/avatars',
         filename: (req, file, cb) => {
-          // @ts-ignore
-          const userId = req.user.sub;
-          cb(null, `${userId}.${file.originalname.split('.')[1]}`);
+          cb(
+            null,
+            `${new Date().getTime()}.${file.originalname.split('.')[1]}`,
+          );
         },
       }),
       fileFilter(req, file, callback) {
-        console.log({ file });
         if (!file.mimetype.match(/\/(jpg|jpeg|png)$/)) {
           return callback(
             new BadRequestException(
@@ -84,7 +85,6 @@ export class UsersController {
     }),
   )
   uploadAvatar(@UploadedFile() file: Express.Multer.File, @Req() req: Request) {
-    // @ts-ignore
     const userId = req.user.sub;
 
     return this.usersService.uploadAvatar(userId, file);

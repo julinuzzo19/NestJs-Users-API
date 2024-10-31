@@ -1,13 +1,9 @@
-import {
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
 import { User } from './entities/user.entity';
 import { UserUpdateDto } from './dto/user-update.dto';
 import { UserCreateDto } from './dto/user-create.dto';
-import { logger } from 'src/config/logger';
+import { unlink } from 'fs/promises';
 
 @Injectable()
 export class UsersService {
@@ -66,7 +62,20 @@ export class UsersService {
   }
 
   async uploadAvatar(id: string, file: Express.Multer.File) {
-    const filePath = `avatars/${id}.${file.originalname.split('.')[1]}`;
+    const result = await this.databaseService.query(
+      'SELECT avatar FROM users WHERE id = ? AND avatar IS NOT NULL',
+      [id],
+    );
+
+    if (result[0]?.avatar) {
+      try {
+        // delete old avatar if exists
+        await unlink(`public/${result[0].avatar}`);
+      } catch (error) {
+        throw new InternalServerErrorException('Error on delete avatar');
+      }
+    }
+    const filePath = `avatars/${file.filename}`;
 
     this.databaseService.query('UPDATE users SET avatar = ? WHERE id = ?', [
       filePath,

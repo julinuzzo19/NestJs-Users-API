@@ -31,8 +31,10 @@ export class GlobalExceptionFilter implements ExceptionFilter {
           })
         : 'Internal Server Error';
 
+    const stack = exception instanceof Error && exception?.stack;
+
     logger.error(
-      `${typeof responseData === 'string' ? responseData : responseData?.error} - ${request.url} - ${status}`,
+      `${typeof responseData === 'string' ? responseData : responseData?.message || responseData?.error} - ${request.url} - ${status}${stack ? ' - ' + stack : ''}`,
     );
 
     return response.status(status).json(responseData);
