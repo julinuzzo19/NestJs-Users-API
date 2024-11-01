@@ -10,6 +10,7 @@
 - [X] Data validation
 - [X] Documentation
 - [X] Upload files
+- [X] Implement TypeORM instead mysql2
 - [ ] OWASP recommendations
 - [ ] Cache functionality
 - [ ] Tests
