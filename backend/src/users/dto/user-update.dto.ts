@@ -1,12 +1,13 @@
 import { IsEmail, IsIn, IsNotEmpty } from 'class-validator';
+import { User } from '../user.entity';
 
 export class UserUpdateDto {
   @IsNotEmpty()
-  name: string;
+  name: User['name'];
   @IsEmail()
-  email: string;
+  email: User['email'];
   @IsNotEmpty()
-  password: string;
+  password: User['password'];
   @IsIn(['ADMIN', 'USER'])
-  role: string;
+  role: User['role'];
 }

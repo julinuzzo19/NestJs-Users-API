@@ -6,7 +6,8 @@ const { combine, timestamp, label, printf } = format;
 
 // custom log display format
 const customFormat = format.printf(({ timestamp, level, stack, message }) => {
-  return `${timestamp} - [${level.toUpperCase()}] - ${message} - ${stack}`;
+  const log = `${timestamp} - [${level.toUpperCase()}] - ${message}${stack ? ' - ' + stack : ''}`;
+  return log;
 });
 
 const options: {

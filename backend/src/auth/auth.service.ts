@@ -6,24 +6,30 @@ import {
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { UsersService } from 'src/users/users.service';
 import { SignUpDto } from './dto/login.dto';
 import { generateUUID } from 'src/utils/generateUUID';
 import { UserCreateDto } from 'src/users/dto/user-create.dto';
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
+import { User } from 'src/users/user.entity';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class AuthService {
   private saltOrRounds = 10;
 
   constructor(
-    private userService: UsersService,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
     private jwtService: JwtService,
   ) {}
 
   async signIn(email: string, pass: string): Promise<{ access_token: string }> {
-    const user = await this.userService.findOne({ email });
+    const user = await this.userRepository.findOne({
+      select: ['id', 'email', 'password', 'role'],
+      where: { email },
+    });
 
     if (!user) {
       throw new NotFoundException();
@@ -43,7 +49,10 @@ export class AuthService {
   }
 
   async signUp(signUpDto: SignUpDto): Promise<string> {
-    const user = await this.userService.findOne({ email: signUpDto.email });
+    const user = await this.userRepository.findOne({
+      select: ['email'],
+      where: { email: signUpDto.email },
+    });
 
     if (user) {
       throw new BadRequestException('Email already in use');
@@ -71,7 +80,7 @@ export class AuthService {
       // });
       throw new BadRequestException(errors);
     } else {
-      await this.userService.create(bodyUserCreate);
+      await this.userRepository.save(bodyUserCreate);
     }
 
     return bodyUserCreate.id;

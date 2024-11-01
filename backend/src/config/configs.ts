@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-export const {
+const {
   DB_HOST,
   DB_USER,
   DB_PASSWORD,
@@ -12,3 +12,29 @@ export const {
   PORT,
   JWT_SECRET,
 } = process.env;
+
+if (
+  !DB_HOST ||
+  !DB_USER ||
+  !DB_PASSWORD ||
+  !DB_NAME ||
+  !DB_PORT ||
+  !NODE_ENV ||
+  !CLIENT_URL ||
+  !PORT ||
+  !JWT_SECRET
+) {
+  throw new Error('Missing environment variables');
+}
+
+export {
+  DB_HOST,
+  DB_USER,
+  DB_PASSWORD,
+  DB_NAME,
+  DB_PORT,
+  NODE_ENV,
+  CLIENT_URL,
+  PORT,
+  JWT_SECRET,
+};

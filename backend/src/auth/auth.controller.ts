@@ -37,7 +37,7 @@ export class AuthController {
     res.clearCookie('access_token');
     return { message: 'Ok' };
   }
-  
+
   @Post('signup')
   @HttpCode(HttpStatus.CREATED)
   async signUp(@Body() signUpDto: SignUpDto) {
