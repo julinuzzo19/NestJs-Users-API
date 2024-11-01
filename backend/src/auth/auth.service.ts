@@ -60,7 +60,6 @@ export class AuthService {
 
     const bodyUserCreate: UserCreateDto = {
       ...signUpDto,
-      id: generateUUID(),
       role: 'USER',
       password: await bcrypt.hash(signUpDto.password, this.saltOrRounds),
     };
@@ -68,7 +67,6 @@ export class AuthService {
     const dtoUser = plainToInstance(UserCreateDto, bodyUserCreate);
 
     const errors = await validate(dtoUser);
-    console.log({ errors });
 
     if (errors.length > 0) {
       // console.log({
@@ -80,9 +78,9 @@ export class AuthService {
       // });
       throw new BadRequestException(errors);
     } else {
-      await this.userRepository.save(bodyUserCreate);
-    }
+      const resultUserCreate = await this.userRepository.save(bodyUserCreate);
 
-    return bodyUserCreate.id;
+      return resultUserCreate.id;
+    }
   }
 }
