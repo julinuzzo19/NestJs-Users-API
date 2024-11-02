@@ -53,8 +53,8 @@ export class UsersService {
     }
     const filePath = `avatars/${file.filename}`;
 
-    this.userRepository.update(id, { avatar: filePath });
+    const res = await this.userRepository.update(id, { avatar: filePath });
 
-    return { message: 'Avatar cargado correctamente', statusCode: 200 };
+    return { message: 'Avatar uploaded successfully', statusCode: 200 };
   }
 }

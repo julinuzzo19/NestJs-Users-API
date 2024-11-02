@@ -1,4 +1,14 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  Post,
+  Put,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { TaskCreateDto } from './dto/task-create.dto';
 import { TasksService } from './tasks.service';
 import { Request } from 'express';
@@ -7,6 +17,7 @@ import { AuthGuard } from 'src/auth/auth.guard';
 import { RolesGuard } from 'src/roles/roles.guard';
 import { Roles } from 'src/roles/role.decorator';
 import { Role } from 'src/roles/role';
+import { TaskUpdateDto } from './dto/task-update.dto';
 
 @ApiBearerAuth()
 @UseGuards(AuthGuard, RolesGuard)
@@ -18,6 +29,15 @@ export class TasksController {
   @Post()
   createTask(@Body() createDto: TaskCreateDto, @Req() req: Request) {
     return this.tasksService.createTask({ ...createDto, user: req.user.sub });
+  }
+  @Roles(Role.USER)
+  @Put(':id')
+  updateTask(
+    @Body() updateDto: TaskUpdateDto,
+    @Param('id') taskId,
+    @Req() req: Request,
+  ) {
+    return this.tasksService.updateTask(updateDto, taskId, req.user.sub);
   }
   @Roles(Role.USER)
   @Get()
