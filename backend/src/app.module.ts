@@ -15,6 +15,7 @@ import {
   NODE_ENV,
 } from './config/configs';
 import { User } from './users/user.entity';
+import { ApiController } from './api/api.controller';
 
 @Module({
   imports: [
@@ -36,7 +37,7 @@ import { User } from './users/user.entity';
     UsersModule,
     AuthModule,
   ],
-  controllers: [],
+  controllers: [ApiController],
   providers: [
     {
       provide: APP_FILTER,

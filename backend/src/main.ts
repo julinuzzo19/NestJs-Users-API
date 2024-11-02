@@ -11,6 +11,7 @@ import { GlobalExceptionFilter } from './config/exceptions.filter';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { CLIENT_URL, NODE_ENV } from './config/configs';
 import { join } from 'path';
+import { doubleCsrf } from 'csrf-csrf';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -24,6 +25,19 @@ async function bootstrap() {
   });
   // cookie configuration
   app.use(cookieParser());
+  // csrf protection
+  // const { doubleCsrfProtection } = doubleCsrf({
+  //   cookieName: 'csrf-token',
+  //   getSecret: (req) => 'secret-csrf-token-cookie-value',
+  //   cookieOptions: {
+  //     secure: process.env.NODE_ENV === 'production',
+  //   },
+  //   size: 64,
+  //   ignoredMethods: ['GET', 'HEAD', 'OPTIONS'],
+  //   getTokenFromRequest: (req) => req.headers['x-csrf-token'],
+  // });
+  // app.use(doubleCsrfProtection);
+
   // logger configuration
   app.useLogger(WinstonModule.createLogger({ instance: logger }));
   // log http requests
