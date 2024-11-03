@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Get,
-  NotFoundException,
   Param,
   Post,
   Put,
@@ -13,10 +12,10 @@ import { TaskCreateDto } from './dto/task-create.dto';
 import { TasksService } from './tasks.service';
 import { Request } from 'express';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { AuthGuard } from 'src/auth/auth.guard';
-import { RolesGuard } from 'src/roles/roles.guard';
-import { Roles } from 'src/roles/role.decorator';
-import { Role } from 'src/roles/role';
+import { AuthGuard } from '../auth/auth.guard';
+import { RolesGuard } from '../roles/roles.guard';
+import { Roles } from '../roles/role.decorator';
+import { Role } from '../roles/role';
 import { TaskUpdateDto } from './dto/task-update.dto';
 
 @ApiBearerAuth()

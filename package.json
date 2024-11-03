@@ -9,7 +9,8 @@
     "lint": "cd ./backend && npm run lint",
     "build": "cd ./backend && npm run build",
     "lint-staged": "cd ./backend && npm run lint-staged",
-    "prepare": "husky"
+    "prepare": "husky",
+    "deploy:prod": "cd ./frontend && npm run deploy:prod && cd ../backend && npm run deploy:prod"
   },
   "author": "",
   "license": "ISC",

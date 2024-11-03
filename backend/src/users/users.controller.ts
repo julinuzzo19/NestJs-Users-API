@@ -15,10 +15,10 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UserUpdateDto } from './dto/user-update.dto';
-import { AuthGuard } from 'src/auth/auth.guard';
-import { Role } from 'src/roles/role';
-import { Roles } from 'src/roles/role.decorator';
-import { RolesGuard } from 'src/roles/roles.guard';
+import { AuthGuard } from '../auth/auth.guard';
+import { Role } from '../roles/role';
+import { Roles } from '../roles/role.decorator';
+import { RolesGuard } from '../roles/roles.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';

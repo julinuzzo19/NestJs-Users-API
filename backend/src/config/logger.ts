@@ -42,6 +42,7 @@ const prodLogger = {
       filename: 'logs/info.log',
       level: 'info',
     }),
+    new transports.Console(options.console),
   ],
 };
 

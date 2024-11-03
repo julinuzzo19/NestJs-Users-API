@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { User } from 'src/users/entities/user.entity';
+import { User } from '../users/user.entity';
 
 declare module 'express' {
   interface Request {

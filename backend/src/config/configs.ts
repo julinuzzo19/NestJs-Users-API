@@ -11,6 +11,8 @@ const {
   CLIENT_URL,
   PORT,
   JWT_SECRET,
+  SSL_KEY,
+  SSL_CERT,
 } = process.env;
 
 if (
@@ -22,7 +24,8 @@ if (
   !NODE_ENV ||
   !CLIENT_URL ||
   !PORT ||
-  !JWT_SECRET
+  !JWT_SECRET ||
+  (NODE_ENV === 'production' && (!SSL_KEY || !SSL_CERT))
 ) {
   throw new Error('Missing environment variables');
 }
@@ -37,4 +40,6 @@ export {
   CLIENT_URL,
   PORT,
   JWT_SECRET,
+  SSL_KEY,
+  SSL_CERT,
 };

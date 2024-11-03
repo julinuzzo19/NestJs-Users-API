@@ -7,11 +7,10 @@ import {
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { SignUpDto } from './dto/login.dto';
-import { generateUUID } from 'src/utils/generateUUID';
-import { UserCreateDto } from 'src/users/dto/user-create.dto';
+import { UserCreateDto } from '../users/dto/user-create.dto';
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
-import { User } from 'src/users/user.entity';
+import { User } from '../users/user.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
