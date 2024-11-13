@@ -11,9 +11,10 @@
 - [X] Documentation
 - [X] Upload files
 - [X] Implement TypeORM instead mysql2
+- [X] Deploy cloud server + Domain + SSL
+- [X] Config and Reverse Proxy NGINX
 - [ ] OWASP recommendations
 - [ ] Cache functionality
 - [ ] Tests
 - [ ] CI/CD
 - [ ] Dockerization
-- [ ] Deploy + SSL
