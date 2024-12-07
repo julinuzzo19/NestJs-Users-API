@@ -9,24 +9,12 @@ import * as morgan from 'morgan';
 import { ValidationPipe } from '@nestjs/common';
 import { GlobalExceptionFilter } from './config/exceptions.filter';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { CLIENT_URL, NODE_ENV, SSL_CERT, SSL_KEY } from './config/configs';
+import { CLIENT_URL, NODE_ENV } from './config/configs';
 import { join } from 'path';
-import * as fs from 'fs';
 // import { doubleCsrf } from 'csrf-csrf';
 
 async function bootstrap() {
-  let httpsOptions;
-
-  if (NODE_ENV === 'production') {
-    httpsOptions = {
-      key: fs.readFileSync(SSL_KEY),
-      cert: fs.readFileSync(SSL_CERT),
-    };
-  }
-
-  const app = await NestFactory.create(AppModule, {
-    ...(NODE_ENV === 'production' && { httpsOptions }),
-  });
+  const app = await NestFactory.create(AppModule);
   // helmet configuration
   app.use(helmet());
   // CORS configuration
