@@ -6,6 +6,7 @@ ecosystem.config.cjs
 /build
 
 .github
+.vscode
 
 
 package-lock.json
