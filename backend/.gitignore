@@ -5,6 +5,8 @@ ecosystem.config.cjs
 /node_modules
 /build
 
+.github
+
 
 package-lock.json
 

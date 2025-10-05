@@ -5,6 +5,7 @@ declare module 'express' {
   interface Request {
     user?: { sub: string; email: string }; // Puedes especificar el tipo exacto de tu objeto usuario
   }
+  
 }
 
 declare global {

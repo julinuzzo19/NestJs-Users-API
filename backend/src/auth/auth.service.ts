@@ -82,4 +82,28 @@ export class AuthService {
       return resultUserCreate.id;
     }
   }
+
+  async validateToken(token: string): Promise<{
+    valid: boolean;
+    user?: { id: string; email: string; role: string };
+    message?: string;
+  }> {
+    try {
+      const payload = await this.jwtService.verifyAsync(token);
+
+      return {
+        valid: true,
+        user: {
+          id: payload.sub,
+          email: payload.email,
+          role: payload.role,
+        },
+      };
+    } catch (error) {
+      return {
+        valid: false,
+        message: error.message || 'Invalid token',
+      };
+    }
+  }
 }

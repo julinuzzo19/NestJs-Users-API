@@ -17,6 +17,6 @@ export class User {
   @Column()
   role: 'USER' | 'ADMIN';
 
-  @Column()
+  @Column({ nullable: true })
   avatar: string;
 }

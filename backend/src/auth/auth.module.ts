@@ -10,7 +10,11 @@ import { JWT_SECRET } from '../config/configs';
     UsersModule,
     JwtModule.register({
       secret: JWT_SECRET,
-      signOptions: { expiresIn: '1h' },
+      signOptions: {
+        expiresIn: '1h',
+        issuer: 'auth-service',
+        audience: 'api-gateway',
+      },
       global: true,
     }),
   ],
