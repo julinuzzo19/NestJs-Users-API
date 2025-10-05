@@ -15,9 +15,6 @@ import {
   NODE_ENV,
 } from './config/configs';
 import { User } from './users/user.entity';
-import { ApiController } from './api/api.controller';
-import { TasksModule } from './tasks/tasks.module';
-import { Task } from './tasks/task.entity';
 
 @Module({
   imports: [
@@ -28,7 +25,7 @@ import { Task } from './tasks/task.entity';
       username: DB_USER,
       password: DB_PASSWORD,
       database: DB_NAME,
-      entities: [User, Task],
+      entities: [User],
       synchronize: NODE_ENV === 'development' ? true : false,
       autoLoadEntities: true,
     }),
@@ -38,9 +35,8 @@ import { Task } from './tasks/task.entity';
     }),
     UsersModule,
     AuthModule,
-    TasksModule,
   ],
-  controllers: [ApiController],
+  controllers: [],
   providers: [
     {
       provide: APP_FILTER,
