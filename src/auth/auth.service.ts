@@ -4,7 +4,8 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
+import * as crypto from 'crypto';
+import { promisify } from 'util';
 import { JwtService } from '@nestjs/jwt';
 import { SignUpDto } from './dto/login.dto';
 import { UserCreateDto } from '../users/dto/user-create.dto';
@@ -16,13 +17,20 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class AuthService {
-  private saltOrRounds = 10;
+  private saltLength = 16;
+  private scrypt = promisify(crypto.scrypt);
 
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
     private jwtService: JwtService,
   ) {}
+
+  private async hashPassword(password: string): Promise<string> {
+    const salt = crypto.randomBytes(this.saltLength);
+    const hash = await this.scrypt(password, salt, 64) as Buffer;
+    return `${salt.toString('hex')}:${hash.toString('hex')}`;
+  }
 
   async signIn(email: string, pass: string): Promise<{ access_token: string }> {
     const user = await this.userRepository.findOne({
@@ -34,7 +42,11 @@ export class AuthService {
       throw new NotFoundException();
     }
 
-    const isMatch = await bcrypt.compare(pass, user.password);
+    const [saltHex, hashHex] = user.password.split(':');
+    const salt = Buffer.from(saltHex, 'hex');
+    const hash = Buffer.from(hashHex, 'hex');
+    const derivedKey = await this.scrypt(pass, salt, 64) as Buffer;
+    const isMatch = crypto.timingSafeEqual(hash, derivedKey);
 
     if (!isMatch) {
       throw new UnauthorizedException();
@@ -60,7 +72,7 @@ export class AuthService {
     const bodyUserCreate: UserCreateDto = {
       ...signUpDto,
       role: 'USER',
-      password: await bcrypt.hash(signUpDto.password, this.saltOrRounds),
+      password: await this.hashPassword(signUpDto.password),
     };
 
     const dtoUser = plainToInstance(UserCreateDto, bodyUserCreate);
