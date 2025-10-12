@@ -15,6 +15,7 @@ import {
   NODE_ENV,
 } from './config/configs';
 import { User } from './users/user.entity';
+import { HealthModule } from '@/health/health.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { User } from './users/user.entity';
     }),
     UsersModule,
     AuthModule,
+    HealthModule,
   ],
   controllers: [],
   providers: [

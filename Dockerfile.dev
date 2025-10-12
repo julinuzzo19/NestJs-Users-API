@@ -1,47 +1,33 @@
-FROM node:22-alpine AS builder
+FROM node:22-alpine
+
+RUN apk add --no-cache bash curl
 
 WORKDIR /app
 
-# Copiar package.json y package-lock.json
+# PASO CRÍTICO 1: Copiar archivos de configuración y dependencias PRIMERO
+# Esto es una optimización importante de Docker: si estos archivos no cambian,
+# Docker reutilizará la capa cacheada de 'npm install' en builds futuros,
+# lo cual ahorra muchísimo tiempo
 COPY package*.json ./
+COPY tsconfig.json ./
+COPY tsconfig.build.json ./
+COPY nest-cli.json ./
+COPY .eslintrc.cjs ./
+COPY .prettierrc ./
+COPY .prettierignore ./
 
-# Instalar dependencias
-RUN npm ci
 
-# Copiar código fuente
-COPY . .
+# PASO CRÍTICO 2: Instalar TODAS las dependencias (incluyendo devDependencies)
+# Usamos 'npm install' en lugar de 'npm ci --only=production' porque necesitamos
+# herramientas como tsx, nodemon, typescript, etc. que están en devDependencies
+# Estas herramientas son esenciales para el hot reloading
+RUN npm install
 
-# Compilar TypeScript
-RUN npm run build
 
-# ====================================
-# Etapa de producción
-# ====================================
-FROM node:22-alpine AS production
+COPY src ./src
 
-WORKDIR /app
-
-# Crear usuario no-root para seguridad
-RUN addgroup -g 1001 -S nodejs && \
-    adduser -S nestjs -u 1001
-
-# Copiar dependencias desde builder
-COPY --from=builder --chown=nestjs:nodejs /app/node_modules ./node_modules
-COPY --from=builder --chown=nestjs:nodejs /app/dist ./dist
-COPY --from=builder --chown=nestjs:nodejs /app/package*.json ./
-
-# Crear directorio para avatars
-RUN mkdir -p /app/public/avatars && \
-    chown -R nestjs:nodejs /app/public
-
-# Cambiar a usuario no-root
-USER nestjs
-
-# Definir ARG con valor por defecto
 ARG PORT=3010
-
-# Exponer puerto dinámico
 EXPOSE ${PORT}
- 
-# Comando de inicio
-CMD ["node", "dist/main.js"]
+
+
+CMD ["npm", "run", "dev"]
